@@ -76,20 +76,21 @@ function drawGrid() {
         }
     }
 
-    highlightCell(10, 10, 'blue'); // start
-    highlightCell(2, 2, 'red'); // end
-    //highlightCell((cols - 1) * cellSize, (rows - 1) * cellSize, 'red'); // end
+    highlightCell(0, 0, 'blue'); // start
+    highlightCell((cols - 1), (rows - 1), 'red'); // end
 
     if (debug) {
         ctx.strokeStyle = 'red';
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
     }
+    //console.log(coord);
 };
 
 // highlight a cell
 function highlightCell(x, y, color = 'black') {
     const col = x;
     const row = y;
+    console.log(coord[row][col]);
     const cell = coord[row][col];
     const pixelX = cell.x * cellSize;
     const pixelY = cell.y * cellSize;
@@ -132,15 +133,25 @@ function highlightCell(x, y, color = 'black') {
 }
 
 // generate a random maze
-
 function genRandMaze() {
-    clearGrid();
-    const Input = document.getElementById('wallChance');
-    const wallChance = parseInt(Input.value) / 100;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const slider = document.getElementById('wallChanceSlider');
+    const wallChance = parseInt(slider.value) / 100;
 
+    const startRow = Math.floor(Math.random() * rows);
+    const startCol = Math.floor(Math.random() * cols);
+    const endRow = Math.floor(Math.random() * rows);
+    const endCol = Math.floor(Math.random() * cols);
+
+    // generate random walls
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
+            coord[row][col] = { x: col, y: row, highlighted: false, color: null };
+            ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
             if (coord[row][col].color !== 'black' && coord[row][col].color !== null) {
+                let cell = coord[row][col];
+                cell.highlighted = false;
+                cell.color = null;
                 continue;
             }
             if (Math.random() < wallChance) { // Create a rand wall
@@ -148,10 +159,37 @@ function genRandMaze() {
             }
         }
     }
+    // remove black block if randomly generated on one
+    if (coord[startRow][startCol].color === 'black' || coord[endRow][endCol].color === 'black') {
+        var cell = coord[startRow][startCol];
+        cell.highlighted = false;
+        cell.color = null;
+        cell = coord[endRow][endCol];
+        cell.color = null;
+        cell.highlighted = false;
+    }
+    highlightCell(startCol, startRow, 'blue'); // start
+    highlightCell(endCol, endRow, 'red'); // end
 }
 
 // clear grid
 function clearGrid() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            if (coord[row][col].color !== 'black' && coord[row][col].color !== 'blue' && coord[row][col].color !== 'red') {
+                coord[row][col].color = null;
+                coord[row][col].highlighted = false;
+            }
+            ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
+            if (coord[row][col].color === null) continue;
+            coord[row][col].highlighted = false;
+            highlightCell(col, row, coord[row][col].color);
+        }
+    }
+}
+
+function resetGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGrid();
 }
@@ -199,4 +237,4 @@ function init() {
 };
 
 
-export {coord, init, clearGrid, genRandMaze, debugMode, highlightCell};
+export {coord, init, clearGrid, genRandMaze, debugMode, highlightCell, resetGrid};
