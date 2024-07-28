@@ -9,22 +9,28 @@
 <body>
     <div id="sidebar">
         <h2>MAZES</h2>
+        <button onclick="start()">Start</button>
+        <button onclick="stop()">Stop</button>
         <ul>
             <li>
                 <a href="#" onclick="genRandMaze()">Random</a>
                 <input type="number" id="wallChance" value="30" min="0" max="100" style="width: 50px;">%
             </li>
-            <li><a href="#" onclick="drawGrid1()">Maze 1</a></li>
-            <li><a href="#" onclick="drawGrid2()">Maze 2</a></li>
-            <li><a href="#" onclick="drawGrid3()">Maze 3</a></li>
-            <li><a href="#" onclick="clearGrid()">CLEAR GRID</a></li>
+            <li><a href="#" onclick="drawGrid1()">Test 1</a></li>
+            <li><a href="#" onclick="drawGrid2()">Test 2</a></li>
+            <li><a href="#" onclick="drawGrid3()">Test 3</a></li>
+            <li><button href="#" onclick="clearGrid()">CLEAR GRID</button></li>
         </ul>
         <label>
             <input type="checkbox" id="debugCheckbox" onclick="debugMode()"> Debug Mode
         </label>
     </div>
     <div id="mainContent">
-        <canvas id="gridCanvas"></canvas>
+        <div id="grid-container">
+            <canvas id="gridCanvas"></canvas>
+            <div id="overlay"></div>
+            <div id="cursorPosition" style="position: absolute; pointer-events: none;"></div>
+        </div>
     </div>
     <script type="module" src="js/main.js"></script>
 </body>

@@ -1,31 +1,69 @@
 // Drawing to an HTML Canvas element
+const gridContainer = document.getElementById('grid-container');
+const overlay = document.getElementById('overlay');
 const canvas = document.getElementById('gridCanvas');
 const ctx = canvas.getContext('2d');
+const cursorPositionDiv = document.getElementById('cursorPosition');
 
-// size of each grid cell
+// size of each grid cell and dimensions of the grid
 const cellSize = 50;
+const gridWidth = 20 * cellSize;
+const gridHeight = 20 * cellSize;
 
+canvas.width = gridWidth;
+canvas.height = gridHeight;
+
+gridContainer.appendChild(canvas);
 // coordinates
 let coord = [];
-
-const sidebar = document.getElementById('sidebar');
-const sidebarWidth = sidebar.offsetWidth;
-
-canvas.width = window.innerWidth - sidebarWidth;
-canvas.height = window.innerHeight;
 
 const rows = Math.floor(canvas.height / cellSize);
 const cols = Math.floor(canvas.width / cellSize);
 
 let debug = false;
 
+// debug mode
 function debugMode() {
     debug = !debug;
-    drawGrid(debug);
+    if (debug) {
+        // Draw the bounding box of the canvas
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+        
+        console.log(canvas.width, canvas.height);
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const coordinates = document.createElement('div');
+                coordinates.className = 'overlay-coordinates';
+                coordinates.innerText = `(${col}, ${row})`;
+                coordinates.style.left = `${col * cellSize + 5}px`;
+                coordinates.style.top = `${row * cellSize + 5}px`;
+                overlay.appendChild(coordinates);
+            }
+        }
+        console.log(coord);
+    } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#ccc'; // draw thin lines
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                if (coord[row][col].color !== null) {
+                    ctx.fillStyle = coord[row][col].color;
+                    ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                }
+                ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
+            }
+        }
+        overlay.innerHTML = '';
+        cursorPositionDiv.style.display = 'none';
+        console.log(coord);
+    }
 }
 
-// Function to draw the grid
-function drawGrid(debug = false) {
+// draw the grid
+function drawGrid() {
     // Origin is top left (0, 0)
     // Draw the grid
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -35,31 +73,19 @@ function drawGrid(debug = false) {
         for (let col = 0; col < cols; col++) {
             coord[row][col] = { x: col * cellSize, y: row * cellSize, highlighted: false, color: null };
             ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
-            if (debug) {
-                // Draw coordinates in the center of each cell
-                ctx.font = '12px Arial';
-                ctx.fillStyle = 'green';
-                const text = `(${col}, ${row})`;
-                const textX = col * cellSize + cellSize / 4;
-                const textY = row * cellSize + cellSize / 2;
-                ctx.fillText(text, textX, textY);
-            }
         }
-    }
-
-    if (debug) {
-        // Draw the bounding box of the canvas
-        ctx.strokeStyle = 'red'; // color for the bounding box
-        ctx.lineWidth = 2; // thickness of the bounding box
-        ctx.strokeRect(0, 0, canvas.width, canvas.height);
-        console.log(canvas.width, canvas.height);
     }
 
     highlightCell(0, 0, 'blue'); // start
     highlightCell((cols - 1) * cellSize, (rows - 1) * cellSize, 'red'); // end
+
+    if (debug) {
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    }
 };
 
-// Function to highlight a cell
+// highlight a cell
 function highlightCell(x, y, color = 'black') {
     const col = Math.floor(x / cellSize);
     const row = Math.floor(y / cellSize);
@@ -84,7 +110,7 @@ function highlightCell(x, y, color = 'black') {
     //console.log(coord)
 }
 
-// Function to generate a random maze
+// generate a random maze
 function genRandMaze() {
     clearGrid();
     const Input = document.getElementById('wallChance');
@@ -99,13 +125,14 @@ function genRandMaze() {
     }
 }
 
-// Function to clear grid
+// clear grid
 function clearGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     coord = [];
     drawGrid();
 }
 
+// get the cursor position
 function getCursorPosition(event, rect) {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
@@ -114,18 +141,31 @@ function getCursorPosition(event, rect) {
     return { x, y, col, row };
 }
 
-// Draw the grid initially
+// initialization and event listeners
 function init() {
     drawGrid();
 
     canvas.addEventListener('mousemove', function(event) {
         const rect = canvas.getBoundingClientRect();
         const { x, y, col, row } = getCursorPosition(event, rect);
-        console.log(`Cursor position: (${x}, ${y})`);
-        console.log(`Coord position: (${coord[row][col].x / cellSize}, ${coord[row][col].y / cellSize})`);
+        if (debug) {
+            cursorPositionDiv.style.display = 'block';
+            cursorPositionDiv.style.color = 'white';
+            cursorPositionDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            cursorPositionDiv.style.padding = '5px';
+            cursorPositionDiv.style.borderRadius = '5px';
+            cursorPositionDiv.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.5)';
+            cursorPositionDiv.style.position = 'absolute';
+            cursorPositionDiv.style.pointerEvents = 'none';
+            cursorPositionDiv.style.left = `${x + 10}px`;
+            cursorPositionDiv.style.top = `${y - 10}px`;
+            cursorPositionDiv.innerText = `(${x}, ${y})\nCoord: [${col}, ${row}]`;
+            // console.log(`Cursor position: (${x}, ${y})`);
+            // console.log(`Coord position: (${coord[row][col].x / cellSize}, ${coord[row][col].y / cellSize})`);
+        }
     });
 
-    canvas.addEventListener('click', function(event) {
+    canvas.addEventListener('mouseup', function(event) {
         const rect = canvas.getBoundingClientRect();
         const { x, y, col, row } = getCursorPosition(event, rect);
         if (coord[row][col].color === 'blue' || coord[row][col].color === 'red') return;
