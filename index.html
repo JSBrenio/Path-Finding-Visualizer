@@ -8,27 +8,49 @@
 </head>
 <body>
     <div id="sidebar">
-        <h2>MAZES</h2>
+        <h2>ALGORITHMS</h2>
         <button onclick="start()">Start</button>
         <button onclick="stop()">Stop</button>
         <ul>
             <li>
-                <a href="#" onclick="genRandMaze()">Random</a>
-                <input type="number" id="wallChance" value="30" min="0" max="100" style="width: 50px;">%
+                <a href="#" onclick="genRandMaze()">Random Maze Generator</a>
+                <input type="range" id="wallChanceSlider" value="30" min="0" max="100" style="width: 150px;" oninput="updateWallChanceDisplay(this.value)">
+                <span id="wallChanceDisplay">30</span>%
             </li>
-            <li><a href="#" onclick="drawGrid1()">Test 1</a></li>
-            <li><a href="#" onclick="drawGrid2()">Test 2</a></li>
-            <li><a href="#" onclick="drawGrid3()">Test 3</a></li>
             <li><button href="#" onclick="clearGrid()">CLEAR GRID</button></li>
+            <li><button href="#" onclick="resetGrid()">RESET GRID</button></li>
         </ul>
         <label>
             <input type="checkbox" id="debugCheckbox" onclick="debugMode()"> Debug Mode
         </label>
+        <div id="algorithm-selection">
+            <h3>Select Algorithm</h3>
+            <label>
+                <input type="checkbox" id="bfsCheckbox" onclick="selectAlgorithm('bfs')"> Breadth First Search
+            </label>
+            <label>
+                <input type="checkbox" id="aStarCheckbox" onclick="selectAlgorithm('aStar')"> A*
+            </label>
+            <label>
+                <input type="checkbox" id="dijkstraCheckbox" onclick="selectAlgorithm('dijkstra')"> dijkstra
+            </label>
+        </div>
         <div id="algorithm-stats">
             <h3>Algorithm Stats</h3>
             <p>Steps: <span id="steps">0</span></p>
             <p>Time: <span id="time">0</span> ms</p>
             <p>Path Length: <span id="path-length">0</span></p>
+            <p>Algorithm: <span id="algorithm-name">None</span></p>
+        </div>
+        <button onclick="save()">Save Result</button>
+        <div id="previous-results">
+            <h3>Previous Results</h3>
+            <div id="previous-stats">
+                <p>Steps: <span id="prev-steps">0</span></p>
+                <p>Time: <span id="prev-time">0</span> ms</p>
+                <p>Path Length: <span id="prev-path-length">0</span></p>
+                <p>Algorithm: <span id="prev-algorithm-name">None</span></p>
+            </div>
         </div>
     </div>
     <div id="mainContent">
