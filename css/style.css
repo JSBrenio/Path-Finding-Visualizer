@@ -1,14 +1,19 @@
+/* General body styles */
 body {
     display: flex;
     margin: 0;
     height: 100vh;
     overflow: hidden; /* Prevent body scrolling */
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text color for dark mode */
+    font-family: Arial, sans-serif; /* Set a modern font */
 }
 
+/* Sidebar styles */
 #sidebar {
     width: 200px;
-    background: linear-gradient(135deg, #f0f0f0, #d9d9d9); /* Modern gradient background */
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    background: #1f1f1f; /* Dark background for the sidebar */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Slightly darker shadow */
     overflow-y: auto; /* Make sidebar scrollable if content overflows */
     height: 100vh; /* Ensure sidebar takes full height */
     display: flex;
@@ -19,12 +24,23 @@ body {
 
 #sidebar h2 {
     margin: 10px 0;
+    color: #e0e0e0; /* Light color for headings */
 }
 
 #sidebar button, #sidebar ul, #sidebar label {
     width: 100%; /* Ensure buttons, list, and label take full width */
     text-align: center; /* Center text within these elements */
     margin: 5px 0; /* Add some margin for spacing */
+    background: #333333; /* Dark background for buttons */
+    color: #ffffff; /* Light text color */
+    border: none; /* Remove default borders */
+    padding: 10px; /* Add padding for buttons */
+    cursor: pointer; /* Pointer cursor for buttons */
+    transition: background 0.3s ease; /* Smooth background transition */
+}
+
+#sidebar button:hover, #sidebar button:focus {
+    background: #555555; /* Slightly lighter background on hover/focus */
 }
 
 #sidebar ul {
@@ -38,8 +54,13 @@ body {
 
 #sidebar input[type="number"] {
     margin-left: 5px; /* Add some margin to the left of the input */
+    padding: 5px; /* Add padding for inputs */
+    background: #333333; /* Dark background for inputs */
+    color: #ffffff; /* Light text color */
+    border: none; /* Remove default borders */
 }
 
+/* Main content styles */
 #mainContent {
     flex-grow: 1;
     display: flex;
@@ -47,20 +68,24 @@ body {
     align-items: center;
     padding: 15px;
     overflow: hidden; /* Prevent main content from scrolling */
+    background: #121212; /* Match body background */
 }
 
+/* Grid canvas styles */
 #gridCanvas {
-    border: 1px solid #000;
-    background: linear-gradient(135deg, #f0f0f0, #d9d9d9); /* Modern gradient background */
+    border: 1px solid #ffffff; /* Light border for contrast */
+    background: #1f1f1f; /* Dark background for canvas */
     box-sizing: border-box; /* Include border in the element's total width and height */
 }
 
+/* Grid container styles */
 #grid-container {
     position: relative; /* Ensure the container is positioned correctly */
     width: 1000px; /* Set the width of the container */
     height: 1000px; /* Set the height of the container */
 }
 
+/* Overlay styles */
 #overlay {
     position: absolute; /* Position the overlay absolutely within the container */
     top: 0;
@@ -73,13 +98,13 @@ body {
 .overlay-coordinates {
     position: absolute; /* Position the coordinates absolutely within the overlay */
     font-size: 12px;
-    color: green;
+    color: #ff69b4; /* Bright color for coordinates */
     pointer-events: none; /* Ensure the coordinates do not interfere with interactions */
 }
 
 /* Reset default link styles */
 a {
-    color: inherit; /* Inherit color from parent element */
+    color: #bb86fc; /* Light purple color for links */
     text-decoration: none; /* Remove underline */
     position: relative; /* For pseudo-element positioning */
     transition: color 0.3s ease; /* Smooth color transition */
@@ -87,11 +112,18 @@ a {
 
 /* Style for visited links */
 a:visited {
-    color: #000000; /* Subtle color change for visited links */
+    color: #bb86fc; /* Same color for visited links for consistency */
 }
 
 /* Background highlight on click */
 a:active {
-    background: rgba(0, 0, 0, 0.1); /* Light background highlight */
+    background: rgba(255, 255, 255, 0.1); /* Light background highlight */
     border-radius: 4px; /* Rounded corners for the highlight */
+}
+
+/* Algorithm selection styles */
+#algorithm-selection label {
+    display: block; /* Make labels block elements to stack them */
+    margin-bottom: 10px; /* Add some margin for spacing */
+    color: #e0e0e0; /* Light color for labels */
 }
