@@ -1,5 +1,5 @@
 import { coord, highlightCell } from './grid.js';
-import { Queue } from '../queue.js';
+import { Queue } from './queue.js';
 
 const matrix = coord;
 let frontier;
@@ -11,6 +11,7 @@ let startTime;
 
 // Breadth First Search
 export async function bfs() {
+    clearGrid();
     let blueCellPosition;
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
@@ -32,9 +33,9 @@ export async function bfs() {
     pathLength = 0;
     parent = new Map();
 
-    frontier.enqueue(matrix[x][y]);
-    reached.add(matrix[x][y]);
-    parent.set(matrix[x][y], null);
+    frontier.enqueue(matrix[y][x]);
+    reached.add(matrix[y][x]);
+    parent.set(matrix[y][x], null);
 
     startTime = Date.now();
 
@@ -71,7 +72,8 @@ export async function bfs() {
         // Update the timer display
         const currentTime = Date.now();
         const timeElapsed = currentTime - startTime;
-        document.getElementById('time').innerText = timeElapsed;
+        updateStats(steps, timeElapsed, pathLength);
+
     }
 
     const endTime = Date.now();
@@ -95,7 +97,7 @@ function getNeighbors(current) {
         const newY = current.y + dy;
         if (isValidCell(newX, newY)) {
             highlightCell(current.x, current.y, '#87CEEB'); // Gold
-            neighbors.push(matrix[newX][newY]);
+            neighbors.push(matrix[newY][newX]);
         }
     }
 
@@ -103,25 +105,31 @@ function getNeighbors(current) {
 }
 
 function isValidCell(x, y) {
-    return x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length && matrix[x][y].color !== 'black';
+    return x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length && matrix[y][x].color !== 'black';
 }
 
 function drawPath(parent, cell) {
     while (cell !== null) {
         pathLength++;
         highlightCell(cell.x, cell.y, 'green');
-        console.log(cell);
-        console.log(matrix)
         cell = parent.get(cell);
     }
     document.getElementById('path-length').innerText = pathLength;
 }
 
 function updateStats(steps = 0, time = 0, pathLength = 0) {
+    document.getElementById('algorithm-name').innerText = 'BFS';
     if (!running) return;
     document.getElementById('steps').innerText = steps;
     document.getElementById('time').innerText = time;
     document.getElementById('path-length').innerText = pathLength;
+}
+
+export function saveCurrentResults() {
+    document.getElementById('prev-steps').innerText = document.getElementById('steps').innerText;
+    document.getElementById('prev-time').innerText = document.getElementById('time').innerText;
+    document.getElementById('prev-path-length').innerText = document.getElementById('path-length').innerText;
+    document.getElementById('prev-algorithm-name').innerText = document.getElementById('algorithm-name').innerText;
 }
 
 function sleep(ms) {
