@@ -30,7 +30,7 @@ function debugMode() {
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 2;
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
-        
+
         console.log(canvas.width, canvas.height);
 
         for (let row = 0; row < rows; row++) {
@@ -71,13 +71,14 @@ function drawGrid() {
     for (let row = 0; row < rows; row++) {
         coord[row] = [];
         for (let col = 0; col < cols; col++) {
-            coord[row][col] = { x: col * cellSize, y: row * cellSize, highlighted: false, color: null };
+            coord[row][col] = { x: col, y: row, highlighted: false, color: null };
             ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
         }
     }
 
-    highlightCell(0, 0, 'blue'); // start
-    highlightCell((cols - 1) * cellSize, (rows - 1) * cellSize, 'red'); // end
+    highlightCell(10, 10, 'blue'); // start
+    highlightCell(2, 2, 'red'); // end
+    //highlightCell((cols - 1) * cellSize, (rows - 1) * cellSize, 'red'); // end
 
     if (debug) {
         ctx.strokeStyle = 'red';
@@ -87,21 +88,41 @@ function drawGrid() {
 
 // highlight a cell
 function highlightCell(x, y, color = 'black') {
-    const col = Math.floor(x / cellSize);
-    const row = Math.floor(y / cellSize);
-    ctx.strokeStyle = '#ccc';
+    const col = x;
+    const row = y;
+    const cell = coord[row][col];
+    const pixelX = cell.x * cellSize;
+    const pixelY = cell.y * cellSize;
 
-    if (row >= 0 && row < coord.length && col >= 0 && col < coord[row].length) {
-        const cell = coord[row][col];
+    if (debug) {
+        console.log(col, row);
+        console.log(coord[row][col]);
+        console.log(x, y)
+    }
+    ctx.strokeStyle = '#ccc';
+    // don't override the start and end cells
+    if ((coord[row][col].color === 'blue' && color !== 'blue') || (coord[row][col].color === 'red' && color !== 'red')) {
+        return;
+    }
+    if (coord[row][col].color !== 'black' && coord[row][col].color !== null) {
+        if (row >= 0 && row < coord.length && col >= 0 && col < coord[row].length) {
+            ctx.fillStyle = color;
+            ctx.fillRect(pixelX, pixelY, cellSize, cellSize);
+            ctx.strokeRect(pixelX, pixelY, cellSize, cellSize);
+            cell.highlighted = true;
+            cell.color = color;
+        }
+    }
+    else if (row >= 0 && row < coord.length && col >= 0 && col < coord[row].length) {
         if (!cell.highlighted) {
             ctx.fillStyle = color;
-            ctx.fillRect(cell.x, cell.y, cellSize, cellSize);
-            ctx.strokeRect(cell.x, cell.y, cellSize, cellSize);
+            ctx.fillRect(pixelX, pixelY, cellSize, cellSize);
+            ctx.strokeRect(pixelX, pixelY, cellSize, cellSize);
             cell.highlighted = true;
             cell.color = color;
         } else {
-            ctx.clearRect(cell.x, cell.y, cellSize, cellSize);
-            ctx.strokeRect(cell.x, cell.y, cellSize, cellSize);
+            ctx.clearRect(pixelX, pixelY, cellSize, cellSize);
+            ctx.strokeRect(pixelX, pixelY, cellSize, cellSize);
             cell.highlighted = false;
             cell.color = null;
         }
@@ -111,15 +132,19 @@ function highlightCell(x, y, color = 'black') {
 }
 
 // generate a random maze
+
 function genRandMaze() {
     clearGrid();
     const Input = document.getElementById('wallChance');
     const wallChance = parseInt(Input.value) / 100;
 
-    for (let row = 1; row < rows - 1; row++) {
-        for (let col = 1; col < cols - 1; col++) {
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            if (coord[row][col].color !== 'black' && coord[row][col].color !== null) {
+                continue;
+            }
             if (Math.random() < wallChance) { // Create a rand wall
-                highlightCell(col * cellSize, row * cellSize);
+                highlightCell(col, row);
             }
         }
     }
@@ -128,7 +153,6 @@ function genRandMaze() {
 // clear grid
 function clearGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    coord = [];
     drawGrid();
 }
 
@@ -168,11 +192,11 @@ function init() {
     canvas.addEventListener('mouseup', function(event) {
         const rect = canvas.getBoundingClientRect();
         const { x, y, col, row } = getCursorPosition(event, rect);
-        if (coord[row][col].color === 'blue' || coord[row][col].color === 'red') return;
-        highlightCell(x, y);
+        if (coord[row][col].color !== 'black' && coord[row][col].color !== null) return;
+        highlightCell(col, row);
     });
 
 };
 
 
-export {coord, init, clearGrid, genRandMaze, debugMode};
+export {coord, init, clearGrid, genRandMaze, debugMode, highlightCell};
