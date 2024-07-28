@@ -1,0 +1,28 @@
+body {
+    display: flex;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden; /* Prevent body scrolling */
+}
+
+#sidebar {
+    width: 150px;
+    background-color: #f4f4f4;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto; /* Make sidebar scrollable if content overflows */
+    height: 100vh; /* Ensure sidebar takes full height */
+}
+
+#mainContent {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    overflow: hidden; /* Prevent main content from scrolling */
+}
+
+#gridCanvas {
+    border: 1px solid #000;
+    box-sizing: border-box; /* Include border in the element's total width and height */
+}
