@@ -1,11 +1,13 @@
 import { coord, highlightCell, clearGrid } from './grid.js';
 import { PriorityQueue } from './p_queue.js';
+import { Statistics } from './statistics.js';
 
 const matrix = coord;
 let steps = 0;
 let pathLength = 0;
 let running = false;
 let startTime;
+export let stats = new Statistics('Dijkstra');
 
 export async function dijkstra() {
     clearGrid();
@@ -42,20 +44,20 @@ export async function dijkstra() {
     running = true;
     const start = {x: blueCellPosition.x , y: blueCellPosition.y};
     const goal = {x: redCellPosition.x , y: redCellPosition.y};
-    const openList = new PriorityQueue();
-    const closedList = new Set();
-    const gScore = new Map();
-    const fScore = new Map();
+    const frontier = new PriorityQueue();
+    const evaluated = new Set();
+    const cost = new Map();
+    const totalCost = new Map();
     const cameFrom = new Map();
 
-    gScore.set(start, 0);
-    openList.enqueue(start, 0);
+    cost.set(start, 0);
+    frontier.enqueue(start, 0);
     startTime = Date.now();
-    while (!openList.isEmpty() && running) {
+    while (!frontier.isEmpty() && running) {
         steps++;
         document.getElementById('steps').innerText = steps;
 
-        const current = openList.dequeue();
+        const current = frontier.dequeue();
 
         if (current.x === goal.x && current.y === goal.y) {
             const endTime = Date.now();
@@ -64,20 +66,20 @@ export async function dijkstra() {
             return reconstructPath(cameFrom, current);
         }
 
-        closedList.add(current);
+        evaluated.add(current);
 
         const neighbors = getNeighbors(current);
         for (let neighbor of neighbors) {
-            if (closedList.has(neighbor)) {
+            if (evaluated.has(neighbor)) {
                 continue;
             }
 
-            const tentativeGScore = gScore.get(current);
-            if (!gScore.has(neighbor) || tentativeGScore < gScore.get(neighbor)) {
+            const tentativecost = cost.get(current);
+            if (!cost.has(neighbor) || tentativecost < cost.get(neighbor)) {
                 cameFrom.set(neighbor, current);
-                gScore.set(neighbor, tentativeGScore);
-                if (!openList.elements.some(e => e.element === neighbor)) {
-                    openList.enqueue(neighbor, fScore.get(neighbor));
+                cost.set(neighbor, tentativecost);
+                if (!frontier.elements.some(e => e.element === neighbor)) {
+                    frontier.enqueue(neighbor, totalCost.get(neighbor));
                     highlightCell(neighbor.x, neighbor.y, '#FFD700');
                 }
             }
@@ -143,6 +145,7 @@ export function saveCurrentResults() {
     document.getElementById('prev-steps').innerText = document.getElementById('steps').innerText;
     document.getElementById('prev-time').innerText = document.getElementById('time').innerText;
     document.getElementById('prev-path-length').innerText = document.getElementById('path-length').innerText;
+    document.getElementById('nodes-visited').innerText = document.getElementById('nodes-visited').innerText;
     document.getElementById('prev-algorithm-name').innerText = document.getElementById('algorithm-name').innerText;
 }
 

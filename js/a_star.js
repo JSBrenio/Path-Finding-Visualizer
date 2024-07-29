@@ -1,11 +1,10 @@
 import { coord, highlightCell, clearGrid } from './grid.js';
 import { PriorityQueue } from './p_queue.js';
+import { Statistics } from './statistics.js';
 
 const matrix = coord;
-let steps = 0;
-let pathLength = 0;
 let running = false;
-let startTime;
+export let stats = new Statistics('A*');
 
 function manhattanHeuristic(start, goal) {
     //console.log( start.x, start.y, goal.x, goal.y);
@@ -14,8 +13,7 @@ function manhattanHeuristic(start, goal) {
 
 export async function aStar() {
     clearGrid();
-    let steps = 0;
-    pathLength = 0
+    stats.reset();
     let blueCellPosition;
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
@@ -47,54 +45,55 @@ export async function aStar() {
     running = true;
     const start = {x: blueCellPosition.x , y: blueCellPosition.y};
     const goal = {x: redCellPosition.x , y: redCellPosition.y};
-    const openList = new PriorityQueue();
-    const closedList = new Set();
-    const gScore = new Map();
-    const fScore = new Map();
+    const frontier = new PriorityQueue();
+    const evaluated = new Set();
+    const cost = new Map();
+    const totalCost = new Map();
     const cameFrom = new Map();
 
-    gScore.set(start, 0);
-    fScore.set(start, manhattanHeuristic(start, goal));
-    //console.log(gScore, fScore);
-    openList.enqueue(start, fScore.get(start));
-    startTime = Date.now();
-    while (!openList.isEmpty() && running) {
-        steps++;
-        document.getElementById('steps').innerText = steps;
+    cost.set(start, 0);
+    totalCost.set(start, manhattanHeuristic(start, goal));
+    //console.log(cost, totalCost);
+    frontier.enqueue(start, totalCost.get(start));
+    stats.startTimer();
+    while (!frontier.isEmpty() && running) {
+        stats.step();
 
-        const current = openList.dequeue();
+        const current = frontier.dequeue();
 
         if (current.x === goal.x && current.y === goal.y) {
-            const endTime = Date.now();
-            const timeTaken = endTime - startTime;
-            updateStats(steps, timeTaken);
+            stats.stopTimer();
+            stats.update();
             return reconstructPath(cameFrom, current);
         }
 
-        closedList.add(current);
+        evaluated.add(current);
 
         const neighbors = getNeighbors(current);
         for (let neighbor of neighbors) {
-            if (closedList.has(neighbor)) {
+            if (evaluated.has(neighbor)) {
                 continue;
             }
+            let weight = 0;
+            
+            const tentativecost = cost.get(current) + weight;
 
-            const tentativeGScore = gScore.get(current) + 0;
-
-            if (!gScore.has(neighbor) || tentativeGScore < gScore.get(neighbor)) {
+            if (!cost.has(neighbor) || tentativecost < cost.get(neighbor)) {
                 cameFrom.set(neighbor, current);
-                gScore.set(neighbor, tentativeGScore);
-                fScore.set(neighbor, tentativeGScore + manhattanHeuristic(neighbor, goal));
+                cost.set(neighbor, tentativecost);
+                totalCost.set(neighbor, tentativecost + manhattanHeuristic(neighbor, goal));
 
-                if (!openList.elements.some(e => e.element === neighbor)) {
-                    openList.enqueue(neighbor, fScore.get(neighbor));
+                if (!frontier.elements.some(e => e.element === neighbor)) {
+                    stats.visit();
+                    frontier.enqueue(neighbor, totalCost.get(neighbor));
                     highlightCell(neighbor.x, neighbor.y, '#FFD700');
                 }
             }
 
         // Visualize the current step
         highlightCell(current.x, current.y, '#FFD700'); // Light blue for current cell
-        updateStats(steps, Date.now() - startTime);
+        stats.stopTimer();
+        stats.update();
         await sleep(10); // Pause for 100ms to visualize
         }
     }
@@ -135,25 +134,10 @@ function reconstructPath(cameFrom, current) {
 
     }
     for (let cell of path.reverse()) {
-        pathLength++;
-        document.getElementById('path-length').innerText = pathLength;
+        stats.path();
         highlightCell(cell.x, cell.y, 'green');
     };
-}
-
-function updateStats(steps = 0, time = 0, pathLength = 0) {
-    document.getElementById('algorithm-name').innerText = 'A*';
-    if (!running) return;
-    document.getElementById('steps').innerText = steps;
-    document.getElementById('time').innerText = time;
-    document.getElementById('path-length').innerText = pathLength;
-}
-
-export function saveCurrentResults() {
-    document.getElementById('prev-steps').innerText = document.getElementById('steps').innerText;
-    document.getElementById('prev-time').innerText = document.getElementById('time').innerText;
-    document.getElementById('prev-path-length').innerText = document.getElementById('path-length').innerText;
-    document.getElementById('prev-algorithm-name').innerText = document.getElementById('algorithm-name').innerText;
+    stats.update();
 }
 
 function sleep(ms) {
@@ -161,8 +145,9 @@ function sleep(ms) {
 }
 
 export function stop() {
+    if (running) {
+        stats.stopTimer();
+        stats.update();
+    }
     running = false;
-    const endTime = Date.now();
-    const totalTimeElapsed = endTime - startTime;
-    updateStats(steps, totalTimeElapsed, pathLength);
 }
