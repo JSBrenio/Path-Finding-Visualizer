@@ -1,7 +1,7 @@
 import { init, genRandMaze, clearGrid, debugMode, resetGrid } from './grid.js';
-import { bfs, stop as bfs_stop, saveCurrentResults as bfsSave } from './bfs.js';
-import { aStar, stop as aStar_stop, saveCurrentResults as aSave} from './a_star.js';
-import { dijkstra, stop as dij_stop, saveCurrentResults as dijSave } from './dijkstra.js';
+import { bfs, stop as bfs_stop, stats as bsfStats } from './bfs.js';
+import { aStar, stop as aStar_stop, stats as aStats} from './a_star.js';
+import { dijkstra, stop as dij_stop, stats as dijStats } from './dijkstra.js';
 
 let selectedAlgorithm = 'aStar';
 
@@ -35,13 +35,13 @@ function start() {
 function stop() {
     if (selectedAlgorithm === 'bfs') {
         bfs_stop();
-        bfsSave();
+        bsfStats.saveCurrentResults();
     } else if (selectedAlgorithm === 'aStar') {
         aStar_stop();
-        aSave();
+        aStats.saveCurrentResults();
     } else if (selectedAlgorithm === 'dijkstra') {
         dij_stop();
-        dijSave();
+        dijStats.saveCurrentResults();
     }
 }
 
@@ -54,11 +54,11 @@ function selectAlgorithm(algorithm) {
 
 function save() {
     if (selectedAlgorithm === 'bfs') {
-        bfsSave();
+        bsfStats.saveCurrentResults();
     } else if (selectedAlgorithm === 'aStar') {
-        aSave();
+        aStats.saveCurrentResults();
     } else if (selectedAlgorithm === 'dijkstra') {
-        dijSave();
+        dijStats.saveCurrentResults();
     }
 }
 
