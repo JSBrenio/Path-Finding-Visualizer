@@ -157,7 +157,7 @@ function genRandMaze() {
         for (let col = 0; col < cols; col++) {
             const weight = allowWeight ? Math.floor(Math.random() * 10) + 1 : 0; // Random integer between 1 and 10
             allowWeight ? coord[row][col] = { x: col, y: row, highlighted: false, color: null, weight: weight } 
-            : coord[row][col] = { x: col, y: row, highlighted: false, color: null, weight: 0 };
+            : coord[row][col] = { x: col, y: row, highlighted: false, color: null, weight: 1 };
             ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
             if (coord[row][col].color !== 'black' && coord[row][col].color !== null) {
                 let cell = coord[row][col];
