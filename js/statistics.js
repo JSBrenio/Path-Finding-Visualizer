@@ -13,6 +13,7 @@ export class Statistics {
         this.time = 0;
         this.pathLength = 0;
         this.visitedNodes = 0;
+        document.getElementById('path-weight').innerText = 0;
         this.updateDOM();
     }
 
@@ -57,6 +58,7 @@ export class Statistics {
         document.getElementById('prev-time').innerText = document.getElementById('time').innerText;
         document.getElementById('prev-path-length').innerText = document.getElementById('path-length').innerText;
         document.getElementById('prev-nodes-visited').innerText = document.getElementById('nodes-visited').innerText;
+        document.getElementById('prev-path-weight').innerText = document.getElementById('path-weight').innerText;
         document.getElementById('prev-algorithm-name').innerText = document.getElementById('algorithm-name').innerText;
     }
 }
