@@ -1,41 +1,32 @@
-import { coord, highlightCell } from './grid.js';
+import { highlightCell, blueCellPosition } from './grid.js';
 import { Queue } from './queue.js';
 import { Statistics } from './statistics.js';
+import { getNeighbors, reconstructPath } from './pathUtils.js';
 
-const matrix = coord;
-let frontier;
-let reached;
 let running = false;
-let startTime;
 export let stats = new Statistics('Breadth First Search');
 
-// Breadth First Search
+/**
+ * Performs the Breadth-First Search (BFS) algorithm to find the shortest path.
+ * Highlights cells as they are visited and updates statistics.
+ * 
+ * @async
+ * @function bfs
+ * @returns {Promise<void>}
+ */
 export async function bfs() {
     stats.reset();
     clearGrid();
-    let blueCellPosition;
-    for (let i = 0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j].color === 'blue') {
-                blueCellPosition = { x: j, y: i };
-                break;
-            }
-        }
-        if (blueCellPosition) {
-            break;
-        }
-    }
-    let {x, y} = blueCellPosition;
-    let start = matrix[y][x];
+    let start = {x: blueCellPosition.x, y: blueCellPosition.y};
     running = true;
 
-    frontier = new Queue();
-    reached = new Set();
-    parent = new Map();
+    const frontier = new Queue();
+    const reached = new Set();
+    const cameFrom = new Map();
 
     frontier.enqueue(start);
     reached.add(start);
-    parent.set(start, null);
+    cameFrom.set(start, null);
 
     stats.startTimer();
 
@@ -47,7 +38,7 @@ export async function bfs() {
         // Check if the current cell is the target cell
         if (current.color === 'red') {
             running = false;
-            drawPath(parent, current);
+            reconstructPath(cameFrom, current);
             running = false;
         }
 
@@ -56,15 +47,14 @@ export async function bfs() {
             if (!reached.has(neighbor)) {
                 frontier.enqueue(neighbor);
                 stats.visit();
-                highlightCell(neighbor.x, neighbor.y, '#FFD700'); // Sky Blue
+                highlightCell(neighbor.x, neighbor.y, '#FFD700');
                 if (neighbor.color === 'red') {
                     running = false;
-                    parent.set(neighbor, current);
-                    drawPath(parent, neighbor);
-                    running = false;
+                    cameFrom.set(neighbor, current);
+                    return reconstructPath(cameFrom, neighbor);
                 }
                 reached.add(neighbor);
-                parent.set(neighbor, current);
+                cameFrom.set(neighbor, current);
             }
         }
         if (!document.getElementById('sleep').checked) await sleep(10); // Pause to visualize
@@ -78,60 +68,22 @@ export async function bfs() {
     stats.update();
 }
 
-function getNeighbors(current) {
-    const neighbors = [];
-    let directions = [];
-    let diagonal = document.getElementById('diagonalMovementCheckbox').checked;
-    if (diagonal) {
-        directions = [
-            { dx: -1, dy: 0 }, // left
-            { dx: 1, dy: 0 },  // right
-            { dx: 0, dy: -1 }, // up
-            { dx: 0, dy: 1 },  // down
-            { dx: -1, dy: -1 }, // top-left
-            { dx: 1, dy: -1 },  // top-right
-            { dx: -1, dy: 1 },  // bottom-left
-            { dx: 1, dy: 1 }    // bottom-right
-        ];
-    } else {
-        directions = [
-            { dx: -1, dy: 0 }, // left
-            { dx: 1, dy: 0 },  // right
-            { dx: 0, dy: -1 }, // up
-            { dx: 0, dy: 1 }  // down
-        ];
-    }
-
-
-    for (let { dx, dy } of directions) {
-        const newX = current.x + dx;
-        const newY = current.y + dy;
-        if (isValidCell(newX, newY)) {
-            highlightCell(newX, newY, '#87CEEB');
-            neighbors.push(matrix[newY][newX]);
-        }
-    }
-
-    return neighbors;
-}
-
-function isValidCell(x, y) {
-    return x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length && matrix[y][x].color !== 'black';
-}
-
-function drawPath(parent, cell) {
-    while (cell !== null) {
-        stats.path();
-        highlightCell(cell.x, cell.y, 'green');
-        cell = parent.get(cell);
-    }
-    stats.update();
-}
-
+/**
+ * Pauses execution for a specified number of milliseconds.
+ * 
+ * @function sleep
+ * @param {number} ms - The number of milliseconds to sleep.
+ * @returns {Promise<void>}
+ */
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/**
+ * Stops the BFS algorithm.
+ * 
+ * @function stop
+ */
 export function stop() {
     if (running) {
         stats.stopTimer();
