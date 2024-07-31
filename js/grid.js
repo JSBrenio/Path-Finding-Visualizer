@@ -94,7 +94,6 @@ function drawGrid() {
 function highlightCell(x, y, color = 'black') {
     const col = x;
     const row = y;
-    console.log(coord[row][col]);
     const cell = coord[row][col];
     const pixelX = cell.x * cellSize;
     const pixelY = cell.y * cellSize;
@@ -241,6 +240,5 @@ function init() {
     });
 
 };
-
 
 export {coord, init, clearGrid, genRandMaze, debugMode, highlightCell, resetGrid, blueCellPosition, redCellPosition};
