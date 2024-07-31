@@ -23,9 +23,11 @@ const rows = Math.floor(canvas.height / cellSize);
 const cols = Math.floor(canvas.width / cellSize);
 
 let debug = false;
+let allowWeight = document.getElementById('weight').checked;
 
 // debug mode
 function debugMode() {
+    allowWeight = document.getElementById('weight').checked;
     debug = !debug;
     if (debug) {
         // Draw the bounding box of the canvas
@@ -39,7 +41,7 @@ function debugMode() {
             for (let col = 0; col < cols; col++) {
                 const coordinates = document.createElement('div');
                 coordinates.className = 'overlay-coordinates';
-                coordinates.innerText = `(${col}, ${row})`;
+                allowWeight ? coordinates.innerText = `(${col}, ${row})\nW: ${coord[row][col].weight.toFixed(2)}` : coordinates.innerText = `(${col}, ${row})`;
                 coordinates.style.left = `${col * cellSize + 5}px`;
                 coordinates.style.top = `${row * cellSize + 5}px`;
                 overlay.appendChild(coordinates);
@@ -68,12 +70,15 @@ function debugMode() {
 function drawGrid() {
     // Origin is top left (0, 0)
     // Draw the grid
+    allowWeight = document.getElementById('weight').checked;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#ccc'; // draw thin lines
     for (let row = 0; row < rows; row++) {
         coord[row] = [];
         for (let col = 0; col < cols; col++) {
-            coord[row][col] = { x: col, y: row, highlighted: false, color: null };
+            const weight = allowWeight ? Math.floor(Math.random() * 10) + 1 : 0; // Random integer between 1 and 10
+            allowWeight ? coord[row][col] = { x: col, y: row, highlighted: false, color: null, weight: weight } 
+            : coord[row][col] = { x: col, y: row, highlighted: false, color: null, weight: 1 };
             ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
         }
     }
@@ -140,6 +145,7 @@ function genRandMaze() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const slider = document.getElementById('wallChanceSlider');
     const wallChance = parseInt(slider.value) / 100;
+    allowWeight = document.getElementById('weight').checked;
 
     const startRow = Math.floor(Math.random() * rows);
     const startCol = Math.floor(Math.random() * cols);
@@ -149,7 +155,9 @@ function genRandMaze() {
     // generate random walls
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
-            coord[row][col] = { x: col, y: row, highlighted: false, color: null };
+            const weight = allowWeight ? Math.floor(Math.random() * 10) + 1 : 0; // Random integer between 1 and 10
+            allowWeight ? coord[row][col] = { x: col, y: row, highlighted: false, color: null, weight: weight } 
+            : coord[row][col] = { x: col, y: row, highlighted: false, color: null, weight: 0 };
             ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
             if (coord[row][col].color !== 'black' && coord[row][col].color !== null) {
                 let cell = coord[row][col];
@@ -208,6 +216,7 @@ function getCursorPosition(event, rect) {
     return { x, y, col, row };
 }
 
+
 // initialization and event listeners
 function init() {
     drawGrid();
@@ -216,6 +225,7 @@ function init() {
         const rect = canvas.getBoundingClientRect();
         const { x, y, col, row } = getCursorPosition(event, rect);
         if (debug) {
+            let w = coord[col][row].weight;
             cursorPositionDiv.style.display = 'block';
             cursorPositionDiv.style.color = 'white';
             cursorPositionDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
@@ -226,9 +236,7 @@ function init() {
             cursorPositionDiv.style.pointerEvents = 'none';
             cursorPositionDiv.style.left = `${x + 10}px`;
             cursorPositionDiv.style.top = `${y - 10}px`;
-            cursorPositionDiv.innerText = `(${x}, ${y})\nCoord: [${col}, ${row}]`;
-            // console.log(`Cursor position: (${x}, ${y})`);
-            // console.log(`Coord position: (${coord[row][col].x / cellSize}, ${coord[row][col].y / cellSize})`);
+            cursorPositionDiv.innerText = `(${x}, ${y})\nCoord: [${col}, ${row}]\nWeight: ${w}`;
         }
     });
 
