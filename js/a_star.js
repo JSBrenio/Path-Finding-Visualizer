@@ -101,14 +101,31 @@ export async function aStar() {
     return []; // No path found
 }
 
+
 function getNeighbors(current) {
     const neighbors = [];
-    const directions = [
-        { dx: -1, dy: 0 }, // left
-        { dx: 1, dy: 0 },  // right
-        { dx: 0, dy: -1 }, // up
-        { dx: 0, dy: 1 }   // down
-    ];
+    let directions = [];
+    let diagonal = document.getElementById('diagonalMovementCheckbox').checked;
+    if (diagonal) {
+        directions = [
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 },  // down
+            { dx: -1, dy: -1 }, // top-left
+            { dx: 1, dy: -1 },  // top-right
+            { dx: -1, dy: 1 },  // bottom-left
+            { dx: 1, dy: 1 }    // bottom-right
+        ];
+    } else {
+        directions = [
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 }  // down
+        ];
+    }
+
 
     for (let { dx, dy } of directions) {
         const newX = current.x + dx;
