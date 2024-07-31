@@ -50,6 +50,14 @@ function selectAlgorithm(algorithm) {
     document.getElementById('bfsCheckbox').checked = (algorithm === 'bfs');
     document.getElementById('aStarCheckbox').checked = (algorithm === 'aStar');
     document.getElementById('dijkstraCheckbox').checked = (algorithm === 'dijkstra');
+
+    // Show or hide the heuristic dropdown
+    const heuristicSelection = document.getElementById('heuristic-selection');
+    if (algorithm === 'aStar') {
+        heuristicSelection.style.display = 'block';
+    } else {
+        heuristicSelection.style.display = 'none';
+    }
 }
 
 function save() {
