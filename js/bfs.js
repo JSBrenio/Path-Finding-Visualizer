@@ -67,7 +67,7 @@ export async function bfs() {
                 parent.set(neighbor, current);
             }
         }
-        await sleep(10); // delay for visualization
+        if (!document.getElementById('sleep').checked) await sleep(10); // Pause to visualize
 
         // Update the timer display
         stats.stopTimer();
