@@ -11,7 +11,7 @@ body {
 
 /* Sidebar styles */
 #sidebar {
-    width: 200px;
+    width: 300px;
     background: #1f1f1f; /* Dark background for the sidebar */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Slightly darker shadow */
     overflow-y: auto; /* Make sidebar scrollable if content overflows */
