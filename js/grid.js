@@ -16,6 +16,8 @@ canvas.height = gridHeight;
 gridContainer.appendChild(canvas);
 // coordinates
 let coord = [];
+let blueCellPosition;
+let redCellPosition;
 
 const rows = Math.floor(canvas.height / cellSize);
 const cols = Math.floor(canvas.width / cellSize);
@@ -78,6 +80,8 @@ function drawGrid() {
 
     highlightCell(0, 0, 'blue'); // start
     highlightCell((cols - 1), (rows - 1), 'red'); // end
+    blueCellPosition = {x: 0, y: 0};
+    redCellPosition = {x: (cols - 1), y: (rows - 1)};
 
     if (debug) {
         ctx.strokeStyle = 'red';
@@ -170,6 +174,8 @@ function genRandMaze() {
     }
     highlightCell(startCol, startRow, 'blue'); // start
     highlightCell(endCol, endRow, 'red'); // end
+    blueCellPosition = {x: startCol, y: startRow};
+    redCellPosition = {x: endCol, y: endRow};
 }
 
 // clear grid
@@ -237,4 +243,4 @@ function init() {
 };
 
 
-export {coord, init, clearGrid, genRandMaze, debugMode, highlightCell, resetGrid};
+export {coord, init, clearGrid, genRandMaze, debugMode, highlightCell, resetGrid, blueCellPosition, redCellPosition};
