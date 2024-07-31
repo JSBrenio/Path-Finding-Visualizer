@@ -34,6 +34,9 @@
             <label>
                 <input type="checkbox" id="dijkstraCheckbox" onclick="selectAlgorithm('dijkstra')"> dijkstra
             </label>
+            <label>
+                <input type="checkbox" id="diagonalMovementCheckbox" > Allow Diagonal Movement
+            </label>
         </div>
         <div id="algorithm-stats">
             <h3>Algorithm Stats</h3>
@@ -50,7 +53,7 @@
                 <p>Steps: <span id="prev-steps">0</span></p>
                 <p>Time: <span id="prev-time">0</span> ms</p>
                 <p>Path Length: <span id="prev-path-length">0</span></p>
-                <p>Nodes Visited: <span id="nodes-visited">0</span></p>
+                <p>Nodes Visited: <span id="prev-nodes-visited">0</span></p>
                 <p>Algorithm: <span id="prev-algorithm-name">None</span></p>
             </div>
         </div>
