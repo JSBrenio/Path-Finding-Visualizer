@@ -127,3 +127,33 @@ a:active {
     margin-bottom: 10px; /* Add some margin for spacing */
     color: #e0e0e0; /* Light color for labels */
 }
+
+#heuristicDropdown {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    margin-top: 10px;
+}
+
+#heuristicDropdown:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+#heuristic-selection h3 {
+    margin-bottom: 5px; /* Reduce the margin below the header */
+}
+
+#heuristicDropdown {
+    margin-top: 5px; /* Reduce the margin above the dropdown */
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
