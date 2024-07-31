@@ -80,18 +80,34 @@ export async function bfs() {
 
 function getNeighbors(current) {
     const neighbors = [];
-    const directions = [
-        { dx: -1, dy: 0 }, // left
-        { dx: 1, dy: 0 },  // right
-        { dx: 0, dy: -1 }, // up
-        { dx: 0, dy: 1 }   // down
-    ];
+    let directions = [];
+    let diagonal = document.getElementById('diagonalMovementCheckbox').checked;
+    if (diagonal) {
+        directions = [
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 },  // down
+            { dx: -1, dy: -1 }, // top-left
+            { dx: 1, dy: -1 },  // top-right
+            { dx: -1, dy: 1 },  // bottom-left
+            { dx: 1, dy: 1 }    // bottom-right
+        ];
+    } else {
+        directions = [
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 }  // down
+        ];
+    }
+
 
     for (let { dx, dy } of directions) {
         const newX = current.x + dx;
         const newY = current.y + dy;
         if (isValidCell(newX, newY)) {
-            highlightCell(current.x, current.y, '#87CEEB'); // Gold
+            highlightCell(newX, newY, '#87CEEB');
             neighbors.push(matrix[newY][newX]);
         }
     }
