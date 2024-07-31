@@ -41,12 +41,16 @@
             <label>
                 <input type="checkbox" id="sleep" > Turn Off Sleep
             </label>
+            <label>
+                <input type="checkbox" id="weight" > Allow Weights
+            </label>
             <div id="heuristic-selection" style="display: none;">
                 <h3>Select Heuristic</h3>
                 <select id="heuristicDropdown" onchange="this.value">
                     <option value="manhattan">Manhattan</option>
                     <option value="euclidean">Euclidean</option>
-                    <option value="chebyshev ">Chebyshev </option>
+                    <option value="chebyshev">Chebyshev </option>
+                    <option value="octile">Octile </option>
                 </select>
             </div>
         </div>
@@ -55,6 +59,7 @@
             <p>Steps: <span id="steps">0</span></p>
             <p>Time: <span id="time">0</span> ms</p>
             <p>Path Length: <span id="path-length">0</span></p>
+            <p>Path Weight: <span id="path-weight">0</span></p>
             <p>Nodes Visited: <span id="nodes-visited">0</span></p>
             <p>Algorithm: <span id="algorithm-name">None</span></p>
         </div>
@@ -65,6 +70,7 @@
                 <p>Steps: <span id="prev-steps">0</span></p>
                 <p>Time: <span id="prev-time">0</span> ms</p>
                 <p>Path Length: <span id="prev-path-length">0</span></p>
+                <p>Path Weight: <span id="prev-path-weight">0</span></p>
                 <p>Nodes Visited: <span id="prev-nodes-visited">0</span></p>
                 <p>Algorithm: <span id="prev-algorithm-name">None</span></p>
             </div>
