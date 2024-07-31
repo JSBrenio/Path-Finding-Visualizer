@@ -74,8 +74,9 @@ function save() {
 function saveImage() {
     const gridCanvas = document.getElementById('gridCanvas');
     const stats = document.getElementById('algorithm-stats');
+    const overlay = document.getElementById('overlay');
 
-    // Create a new canvas to combine the grid and statistics
+    // Create a new canvas to combine the grid and statistics and overlay
     const combinedCanvas = document.createElement('canvas');
     const ctx = combinedCanvas.getContext('2d');
 
@@ -83,8 +84,26 @@ function saveImage() {
     combinedCanvas.width = gridCanvas.width;
     combinedCanvas.height = gridCanvas.height + 200; // Adjust height to fit one line of text
 
+    ctx.fillStyle = '#121212';
+    ctx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
     // Draw the grid
     ctx.drawImage(gridCanvas, 0, 0);
+
+    // Draw the overlay (debug coordinates)
+    const overlayElements = overlay.children;
+    for (let i = 0; i < overlayElements.length; i++) {
+        const element = overlayElements[i];
+        const x = parseInt(element.style.left, 10);
+        const y = parseInt(element.style.top, 10);
+        ctx.font = '12px Arial';
+        ctx.fillStyle = 'black';
+        // Split the text into lines and draw each line separately
+        const lines = element.innerText.split('\n');
+        for (let j = 0; j < lines.length; j++) {
+            ctx.fillText(lines[j], x, y + 10 + (j * 14)); // Adjust y-coordinate for each line
+        }
+    }
+
     const statsLines = stats.innerText.split('\n');
     const statsText = statsLines.slice(2, -2).join(' '); // Skip the first line and join the rest
 
@@ -102,7 +121,7 @@ function saveImage() {
     }
 
     ctx.fillText(`Diagonal Movement: ${document.getElementById('diagonalMovementCheckbox').checked ? 'Enabled' : 'Disabled'}`, 10, gridCanvas.height + 90);
-
+    ctx.fillText(`Weighted: ${document.getElementById('weight').checked ? 'Enabled' : 'Disabled'}`, 10, gridCanvas.height + 120);
     // Save as an image
     const link = document.createElement('a');
     link.href = combinedCanvas.toDataURL('image/png');
