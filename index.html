@@ -31,6 +31,14 @@
             <label>
                 <input type="checkbox" id="aStarCheckbox" onclick="selectAlgorithm('aStar')"> A*
             </label>
+            <div id="heuristic-selection" style="display: none;">
+                <h3>Select Heuristic</h3>
+                <select id="heuristicDropdown" onchange="this.value">
+                    <option value="manhattan">Manhattan</option>
+                    <option value="euclidean">Euclidean</option>
+                    <option value="chebyshev ">Chebyshev </option>
+                </select>
+            </div>
             <label>
                 <input type="checkbox" id="dijkstraCheckbox" onclick="selectAlgorithm('dijkstra')"> dijkstra
             </label>
