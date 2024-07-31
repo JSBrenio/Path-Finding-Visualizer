@@ -14,6 +14,7 @@ window.selectAlgorithm = selectAlgorithm;
 window.resetGrid = resetGrid;
 window.save = save;
 window.updateWallChanceDisplay = updateWallChanceDisplay;
+window.saveImage = saveImage;
 
 function updateWallChanceDisplay () {
     const slider = document.getElementById('wallChanceSlider');
@@ -68,6 +69,45 @@ function save() {
     } else if (selectedAlgorithm === 'dijkstra') {
         dijStats.saveCurrentResults();
     }
+}
+
+function saveImage() {
+    const gridCanvas = document.getElementById('gridCanvas');
+    const stats = document.getElementById('algorithm-stats');
+
+    // Create a new canvas to combine the grid and statistics
+    const combinedCanvas = document.createElement('canvas');
+    const ctx = combinedCanvas.getContext('2d');
+
+    // Set the new canvas size to fit both the grid and the statistics
+    combinedCanvas.width = gridCanvas.width;
+    combinedCanvas.height = gridCanvas.height + 200; // Adjust height to fit one line of text
+
+    // Draw the grid
+    ctx.drawImage(gridCanvas, 0, 0);
+    const statsLines = stats.innerText.split('\n');
+    const statsText = statsLines.slice(2, -2).join(' '); // Skip the first line and join the rest
+
+    // Draw the statistics
+    ctx.font = '28px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText(statsText, 10, gridCanvas.height + 30);
+    
+    if (selectAlgorithm = 'aStar') {
+        ctx.fillText('Algorithm: A*', 10, gridCanvas.height + 60);
+        const heuristic = document.getElementById('heuristicDropdown').value;
+        ctx.fillText(` Heuristic: ${heuristic}`, 175, gridCanvas.height + 60);
+    } else {
+        ctx.fillText(`Algorithm: ${selectedAlgorithm}`, 10, gridCanvas.height + 60);
+    }
+
+    ctx.fillText(`Diagonal Movement: ${document.getElementById('diagonalMovementCheckbox').checked ? 'Enabled' : 'Disabled'}`, 10, gridCanvas.height + 90);
+
+    // Save as an image
+    const link = document.createElement('a');
+    link.href = combinedCanvas.toDataURL('image/png');
+    link.download = `${selectedAlgorithm}.png`;
+    link.click();
 }
 
 init();
