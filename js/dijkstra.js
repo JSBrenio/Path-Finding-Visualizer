@@ -57,7 +57,7 @@ export async function dijkstra() {
         highlightCell(current.x, current.y, '#FFD700'); // Light blue for current cell
         stats.stopTimer();
         stats.update();
-        await sleep(10); // Pause for 100ms to visualize
+        if (!document.getElementById('sleep').checked) await sleep(10); // Pause to visualize
         }
     }
 
@@ -118,22 +118,6 @@ function reconstructPath(cameFrom, current) {
         highlightCell(cell.x, cell.y, 'green');
     };
     stats.update();
-}
-
-function updateStats(steps = 0, time = 0, pathLength = 0) {
-    document.getElementById('algorithm-name').innerText = 'dijkstra';
-    if (!running) return;
-    document.getElementById('steps').innerText = steps;
-    document.getElementById('time').innerText = time;
-    document.getElementById('path-length').innerText = pathLength;
-}
-
-export function saveCurrentResults() {
-    document.getElementById('prev-steps').innerText = document.getElementById('steps').innerText;
-    document.getElementById('prev-time').innerText = document.getElementById('time').innerText;
-    document.getElementById('prev-path-length').innerText = document.getElementById('path-length').innerText;
-    document.getElementById('nodes-visited').innerText = document.getElementById('nodes-visited').innerText;
-    document.getElementById('prev-algorithm-name').innerText = document.getElementById('algorithm-name').innerText;
 }
 
 function sleep(ms) {
