@@ -1,4 +1,4 @@
-import { coord, highlightCell, clearGrid } from './grid.js';
+import { coord, highlightCell, clearGrid, blueCellPosition, redCellPosition } from './grid.js';
 import { PriorityQueue } from './p_queue.js';
 import { Statistics } from './statistics.js';
 
@@ -9,33 +9,6 @@ export let stats = new Statistics('Dijkstra');
 export async function dijkstra() {
     stats.reset();
     clearGrid();
-    let blueCellPosition;
-    for (let i = 0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j].color === 'blue') {
-                blueCellPosition = { x: j, y: i };
-                break;
-            }
-        }
-        if (blueCellPosition) {
-            break;
-        }
-    }
-    //console.log(blueCellPosition);
-
-    let redCellPosition;
-    for (let i = 0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j].color === 'red') {
-                redCellPosition = { x: j, y: i };
-                break;
-            }
-        }
-        if (redCellPosition) {
-            break;
-        }
-    }
-    //console.log(redCellPosition);
 
     running = true;
     const start = {x: blueCellPosition.x , y: blueCellPosition.y};
