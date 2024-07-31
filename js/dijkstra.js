@@ -3,16 +3,12 @@ import { PriorityQueue } from './p_queue.js';
 import { Statistics } from './statistics.js';
 
 const matrix = coord;
-let steps = 0;
-let pathLength = 0;
 let running = false;
-let startTime;
 export let stats = new Statistics('Dijkstra');
 
 export async function dijkstra() {
+    stats.reset();
     clearGrid();
-    let steps = 0;
-    pathLength = 0
     let blueCellPosition;
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
@@ -52,17 +48,16 @@ export async function dijkstra() {
 
     cost.set(start, 0);
     frontier.enqueue(start, 0);
-    startTime = Date.now();
+    stats.startTimer();
     while (!frontier.isEmpty() && running) {
-        steps++;
+        stats.step();
         document.getElementById('steps').innerText = steps;
 
         const current = frontier.dequeue();
 
         if (current.x === goal.x && current.y === goal.y) {
-            const endTime = Date.now();
-            const timeTaken = endTime - startTime;
-            updateStats(steps, timeTaken);
+            stats.stopTimer();
+            stats.updateStats();
             return reconstructPath(cameFrom, current);
         }
 
@@ -79,6 +74,7 @@ export async function dijkstra() {
                 cameFrom.set(neighbor, current);
                 cost.set(neighbor, tentativecost);
                 if (!frontier.elements.some(e => e.element === neighbor)) {
+                    stats.visit();
                     frontier.enqueue(neighbor, totalCost.get(neighbor));
                     highlightCell(neighbor.x, neighbor.y, '#FFD700');
                 }
@@ -86,7 +82,8 @@ export async function dijkstra() {
 
         // Visualize the current step
         highlightCell(current.x, current.y, '#FFD700'); // Light blue for current cell
-        updateStats(steps, Date.now() - startTime);
+        stats.stopTimer();
+        stats.update();
         await sleep(10); // Pause for 100ms to visualize
         }
     }
@@ -96,12 +93,28 @@ export async function dijkstra() {
 
 function getNeighbors(current) {
     const neighbors = [];
-    const directions = [
-        { dx: -1, dy: 0 }, // left
-        { dx: 1, dy: 0 },  // right
-        { dx: 0, dy: -1 }, // up
-        { dx: 0, dy: 1 }   // down
-    ];
+    let directions = [];
+    let diagonal = document.getElementById('diagonalMovementCheckbox').checked;
+    if (diagonal) {
+        directions = [
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 },  // down
+            { dx: -1, dy: -1 }, // top-left
+            { dx: 1, dy: -1 },  // top-right
+            { dx: -1, dy: 1 },  // bottom-left
+            { dx: 1, dy: 1 }    // bottom-right
+        ];
+    } else {
+        directions = [
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 }  // down
+        ];
+    }
+
 
     for (let { dx, dy } of directions) {
         const newX = current.x + dx;
@@ -127,10 +140,11 @@ function reconstructPath(cameFrom, current) {
 
     }
     for (let cell of path.reverse()) {
-        pathLength++;
+        stats.path();
         document.getElementById('path-length').innerText = pathLength;
         highlightCell(cell.x, cell.y, 'green');
     };
+    stats.update();
 }
 
 function updateStats(steps = 0, time = 0, pathLength = 0) {
