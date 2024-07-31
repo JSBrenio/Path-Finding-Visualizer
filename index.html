@@ -23,6 +23,7 @@
         <label>
             <input type="checkbox" id="debugCheckbox" onclick="debugMode()"> Debug Mode
         </label>
+        <button id="saveImage" onclick="saveImage()">Save Grid as Image</button>
         <div id="algorithm-selection">
             <h3>Select Algorithm</h3>
             <label>
@@ -30,6 +31,15 @@
             </label>
             <label>
                 <input type="checkbox" id="aStarCheckbox" onclick="selectAlgorithm('aStar')"> A*
+            </label>
+            <label>
+                <input type="checkbox" id="dijkstraCheckbox" onclick="selectAlgorithm('dijkstra')"> dijkstra
+            </label>
+            <label>
+                <input type="checkbox" id="diagonalMovementCheckbox" > Allow Diagonal Movement
+            </label>
+            <label>
+                <input type="checkbox" id="sleep" > Turn Off Sleep
             </label>
             <div id="heuristic-selection" style="display: none;">
                 <h3>Select Heuristic</h3>
@@ -39,12 +49,6 @@
                     <option value="chebyshev ">Chebyshev </option>
                 </select>
             </div>
-            <label>
-                <input type="checkbox" id="dijkstraCheckbox" onclick="selectAlgorithm('dijkstra')"> dijkstra
-            </label>
-            <label>
-                <input type="checkbox" id="diagonalMovementCheckbox" > Allow Diagonal Movement
-            </label>
         </div>
         <div id="algorithm-stats">
             <h3>Algorithm Stats</h3>
