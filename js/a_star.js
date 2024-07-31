@@ -14,7 +14,6 @@ export let stats = new Statistics('A*');
  */
 function heuristic(start, goal) {
     let selectedHeuristic = document.getElementById('heuristicDropdown').value.trim();
-    console.log(selectedHeuristic);
     switch (selectedHeuristic.toLowerCase()) {
         case 'manhattan':
             return Math.abs(start.x - goal.x) + Math.abs(start.y - goal.y); // |x2 - x1| + |y2 - y1|
@@ -78,7 +77,7 @@ export async function aStar() {
             let weight = neighbor.weight || 1; // default weight is 1
             // Increase weight for diagonal movement
             if (current.x !== neighbor.x && current.y !== neighbor.y) {
-                weight *= 1.5; // Increase the cost for diagonal movement
+                weight = Math.sqrt(Math.pow(weight, 2) + Math.pow(weight, 2)); // Increase the cost for diagonal movement
             }
             const potentialCost = cost.get(current) + weight;
 
