@@ -1,4 +1,4 @@
-import { coord, highlightCell, clearGrid } from './grid.js';
+import { coord, highlightCell, clearGrid, blueCellPosition, redCellPosition } from './grid.js';
 import { PriorityQueue } from './p_queue.js';
 import { Statistics } from './statistics.js';
 
@@ -6,40 +6,23 @@ const matrix = coord;
 let running = false;
 export let stats = new Statistics('A*');
 
-function manhattanHeuristic(start, goal) {
-    //console.log( start.x, start.y, goal.x, goal.y);
-    return Math.abs(start.x - goal.x) + Math.abs(start.y - goal.y);
+function heuristic(start, goal) {
+    let selectedHeuristic = document.getElementById('heuristicDropdown').value;
+    switch (selectedHeuristic.toLowerCase()) {
+        case 'manhattan':
+            return Math.abs(start.x - goal.x) + Math.abs(start.y - goal.y);
+        case 'euclidean':
+            return Math.sqrt(Math.pow(start.x - goal.x, 2) + Math.pow(start.y - goal.y, 2));
+        case 'chebyshev ':
+            return Math.max(Math.abs(start.x - goal.x), Math.abs(start.y - goal.y));
+        default:
+            return 0;
+    }
 }
 
 export async function aStar() {
     clearGrid();
     stats.reset();
-    let blueCellPosition;
-    for (let i = 0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j].color === 'blue') {
-                blueCellPosition = { x: j, y: i };
-                break;
-            }
-        }
-        if (blueCellPosition) {
-            break;
-        }
-    }
-    //console.log(blueCellPosition);
-
-    let redCellPosition;
-    for (let i = 0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j].color === 'red') {
-                redCellPosition = { x: j, y: i };
-                break;
-            }
-        }
-        if (redCellPosition) {
-            break;
-        }
-    }
     //console.log(redCellPosition);
 
     running = true;
@@ -52,7 +35,7 @@ export async function aStar() {
     const cameFrom = new Map();
 
     cost.set(start, 0);
-    totalCost.set(start, manhattanHeuristic(start, goal));
+    totalCost.set(start, heuristic(start, goal));
     //console.log(cost, totalCost);
     frontier.enqueue(start, totalCost.get(start));
     stats.startTimer();
@@ -81,7 +64,7 @@ export async function aStar() {
             if (!cost.has(neighbor) || tentativecost < cost.get(neighbor)) {
                 cameFrom.set(neighbor, current);
                 cost.set(neighbor, tentativecost);
-                totalCost.set(neighbor, tentativecost + manhattanHeuristic(neighbor, goal));
+                totalCost.set(neighbor, tentativecost + heuristic(neighbor, goal));
 
                 if (!frontier.elements.some(e => e.element === neighbor)) {
                     stats.visit();
