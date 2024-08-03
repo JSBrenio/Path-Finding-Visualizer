@@ -2,6 +2,7 @@ import { init, genRandMaze, clearGrid, debugMode, resetGrid } from './grid.js';
 import { bfs, stop as bfs_stop, stats as bsfStats } from './bfs.js';
 import { aStar, stop as aStar_stop, stats as aStats} from './a_star.js';
 import { dijkstra, stop as dij_stop, stats as dijStats } from './dijkstra.js';
+import { collectData } from './createData.js';
 
 let selectedAlgorithm = 'aStar';
 
@@ -15,6 +16,7 @@ window.resetGrid = resetGrid;
 window.save = save;
 window.updateWallChanceDisplay = updateWallChanceDisplay;
 window.saveImage = saveImage;
+window.collectData = collectData;
 
 function updateWallChanceDisplay () {
     const slider = document.getElementById('wallChanceSlider');
@@ -71,7 +73,7 @@ function save() {
     }
 }
 
-function saveImage() {
+export function saveImage(number = 0) {
     const gridCanvas = document.getElementById('gridCanvas');
     const stats = document.getElementById('algorithm-stats');
     const overlay = document.getElementById('overlay');
@@ -112,7 +114,7 @@ function saveImage() {
     ctx.fillStyle = 'black';
     ctx.fillText(statsText, 10, gridCanvas.height + 30);
     
-    if (selectAlgorithm = 'aStar') {
+    if (selectedAlgorithm === 'aStar') {
         ctx.fillText('Algorithm: A*', 10, gridCanvas.height + 60);
         const heuristic = document.getElementById('heuristicDropdown').value;
         ctx.fillText(` Heuristic: ${heuristic}`, 175, gridCanvas.height + 60);
@@ -125,7 +127,8 @@ function saveImage() {
     // Save as an image
     const link = document.createElement('a');
     link.href = combinedCanvas.toDataURL('image/png');
-    link.download = `${selectedAlgorithm}.png`;
+    link.download = `${number + '_' + 
+    (selectedAlgorithm === 'aStar' ? selectedAlgorithm + '_' + document.getElementById('heuristicDropdown').value : selectedAlgorithm)}.png`;
     link.click();
 }
 
