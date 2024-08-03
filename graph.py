@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 files = ["data/0% walls/data.json", "data/10% walls/data.json", "data/20% walls/data.json", "data/30% walls/data.json"]
-metrics = ['Steps', 'ms', 'Length', 'Nodes']  # keys in data.json
+metrics = ['steps', 'ms', 'length', 'nodes']  # keys in data.json
 titles = ['Steps', 'Time', 'Length', 'Nodes Visited']
 
 for file_to_load in files:
@@ -32,7 +32,7 @@ for file_to_load in files:
 
                 ax.set_title(titles[i])
                 ax.set_xlabel('Trials')
-                ax.set_ylabel(metric)
+                ax.set_ylabel(metric.capitalize())
                 ax.legend()
 
         # Adjust layout to prevent overlap
