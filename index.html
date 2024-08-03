@@ -23,7 +23,13 @@
         <label>
             <input type="checkbox" id="debugCheckbox" onclick="debugMode()"> Debug Mode
         </label>
-        <button id="saveImage" onclick="saveImage()">Save Grid as Image</button>
+        <div>
+            <button id="saveImage" onclick="saveImage()">Save Grid as Image</button> 
+        </div>
+        <div>
+            <a href="#" onclick="collectData()">Collect Data</a>
+            <input type="number" id="trials" value="10" min="1" max="100" style="width: 50px;"> Trials
+        </div> 
         <div id="algorithm-selection">
             <h3>Select Algorithm</h3>
             <label>
@@ -84,5 +90,6 @@
         </div>
     </div>
     <script type="module" src="js/main.js"></script>
+
 </body>
 </html>
