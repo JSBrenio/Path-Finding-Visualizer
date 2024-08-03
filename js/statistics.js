@@ -37,10 +37,10 @@ export class Statistics {
         this.visitedNodes++;
     }
 
-    update(steps = this.steps, time = this.time, pathLength = this.pathLength, visitedNodes = this.visitedNodes) {
+    update(steps = this.steps, time = this.time, pathLength = document.getElementById('path-length').innerText, visitedNodes = this.visitedNodes) {
         this.steps = steps;
         this.time = time;
-        this.pathLength = pathLength;
+        this.pathLength = parseInt(pathLength);
         this.visitedNodes = visitedNodes;
         this.updateDOM();
     }
@@ -49,7 +49,7 @@ export class Statistics {
         document.getElementById('algorithm-name').innerText = this.algorithmName;
         document.getElementById('steps').innerText = this.steps;
         document.getElementById('time').innerText = this.time;
-        document.getElementById('path-length').innerText = this.pathLength - 1;
+        document.getElementById('path-length').innerText = this.pathLength === 0 ? 0 : this.pathLength - 1;
         document.getElementById('nodes-visited').innerText = this.visitedNodes;
     }
 
@@ -60,5 +60,9 @@ export class Statistics {
         document.getElementById('prev-nodes-visited').innerText = document.getElementById('nodes-visited').innerText;
         document.getElementById('prev-path-weight').innerText = document.getElementById('path-weight').innerText;
         document.getElementById('prev-algorithm-name').innerText = document.getElementById('algorithm-name').innerText;
+    }
+    
+    toString() {
+        return `${this.algorithmName}: Steps: ${this.steps}, Time: ${this.time}, Path Length: ${this.pathLength}, Nodes Visited: ${this.visitedNodes}`;
     }
 }
