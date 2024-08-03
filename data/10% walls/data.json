@@ -1,0 +1,312 @@
+{
+  "manhattan": [
+    {
+      "steps": 63,
+      "ms": 6,
+      "length": 8,
+      "nodes": 34
+    },
+    {
+      "steps": 99,
+      "ms": 5,
+      "length": 12,
+      "nodes": 52
+    },
+    {
+      "steps": 94,
+      "ms": 6,
+      "length": 8,
+      "nodes": 37
+    },
+    {
+      "steps": 105,
+      "ms": 6,
+      "length": 11,
+      "nodes": 36
+    },
+    {
+      "steps": 121,
+      "ms": 12,
+      "length": 13,
+      "nodes": 44
+    },
+    {
+      "steps": 95,
+      "ms": 7,
+      "length": 12,
+      "nodes": 50
+    },
+    {
+      "steps": 85,
+      "ms": 4,
+      "length": 11,
+      "nodes": 46
+    },
+    {
+      "steps": 336,
+      "ms": 15,
+      "length": 18,
+      "nodes": 81
+    },
+    {
+      "steps": 47,
+      "ms": 5,
+      "length": 7,
+      "nodes": 22
+    },
+    {
+      "steps": 20,
+      "ms": 4,
+      "length": 4,
+      "nodes": 11
+    }
+  ],
+  "euclidean": [
+    {
+      "steps": 134,
+      "ms": 8,
+      "length": 8,
+      "nodes": 41
+    },
+    {
+      "steps": 205,
+      "ms": 10,
+      "length": 12,
+      "nodes": 60
+    },
+    {
+      "steps": 92,
+      "ms": 7,
+      "length": 8,
+      "nodes": 33
+    },
+    {
+      "steps": 149,
+      "ms": 11,
+      "length": 11,
+      "nodes": 42
+    },
+    {
+      "steps": 167,
+      "ms": 10,
+      "length": 13,
+      "nodes": 54
+    },
+    {
+      "steps": 202,
+      "ms": 11,
+      "length": 12,
+      "nodes": 61
+    },
+    {
+      "steps": 174,
+      "ms": 9,
+      "length": 11,
+      "nodes": 53
+    },
+    {
+      "steps": 761,
+      "ms": 24,
+      "length": 18,
+      "nodes": 143
+    },
+    {
+      "steps": 102,
+      "ms": 10,
+      "length": 7,
+      "nodes": 27
+    },
+    {
+      "steps": 20,
+      "ms": 4,
+      "length": 4,
+      "nodes": 11
+    }
+  ],
+  "chebyshev": [
+    {
+      "steps": 217,
+      "ms": 13,
+      "length": 8,
+      "nodes": 46
+    },
+    {
+      "steps": 386,
+      "ms": 14,
+      "length": 12,
+      "nodes": 76
+    },
+    {
+      "steps": 140,
+      "ms": 9,
+      "length": 8,
+      "nodes": 39
+    },
+    {
+      "steps": 208,
+      "ms": 12,
+      "length": 11,
+      "nodes": 58
+    },
+    {
+      "steps": 253,
+      "ms": 13,
+      "length": 13,
+      "nodes": 77
+    },
+    {
+      "steps": 406,
+      "ms": 15,
+      "length": 12,
+      "nodes": 85
+    },
+    {
+      "steps": 336,
+      "ms": 14,
+      "length": 11,
+      "nodes": 75
+    },
+    {
+      "steps": 1014,
+      "ms": 36,
+      "length": 18,
+      "nodes": 180
+    },
+    {
+      "steps": 114,
+      "ms": 6,
+      "length": 7,
+      "nodes": 27
+    },
+    {
+      "steps": 20,
+      "ms": 6,
+      "length": 4,
+      "nodes": 11
+    }
+  ],
+  "octile": [
+    {
+      "steps": 135,
+      "ms": 9,
+      "length": 8,
+      "nodes": 42
+    },
+    {
+      "steps": 205,
+      "ms": 9,
+      "length": 12,
+      "nodes": 60
+    },
+    {
+      "steps": 83,
+      "ms": 10,
+      "length": 8,
+      "nodes": 32
+    },
+    {
+      "steps": 135,
+      "ms": 10,
+      "length": 11,
+      "nodes": 40
+    },
+    {
+      "steps": 158,
+      "ms": 12,
+      "length": 13,
+      "nodes": 53
+    },
+    {
+      "steps": 216,
+      "ms": 14,
+      "length": 12,
+      "nodes": 65
+    },
+    {
+      "steps": 188,
+      "ms": 6,
+      "length": 11,
+      "nodes": 53
+    },
+    {
+      "steps": 562,
+      "ms": 20,
+      "length": 18,
+      "nodes": 123
+    },
+    {
+      "steps": 108,
+      "ms": 6,
+      "length": 7,
+      "nodes": 27
+    },
+    {
+      "steps": 20,
+      "ms": 3,
+      "length": 4,
+      "nodes": 11
+    }
+  ],
+  "dijkstra": [
+    {
+      "steps": 849,
+      "ms": 24,
+      "length": 8,
+      "nodes": 136
+    },
+    {
+      "steps": 1732,
+      "ms": 55,
+      "length": 12,
+      "nodes": 264
+    },
+    {
+      "steps": 891,
+      "ms": 30,
+      "length": 8,
+      "nodes": 161
+    },
+    {
+      "steps": 1423,
+      "ms": 42,
+      "length": 11,
+      "nodes": 230
+    },
+    {
+      "steps": 1376,
+      "ms": 42,
+      "length": 13,
+      "nodes": 217
+    },
+    {
+      "steps": 1253,
+      "ms": 39,
+      "length": 12,
+      "nodes": 190
+    },
+    {
+      "steps": 1369,
+      "ms": 42,
+      "length": 11,
+      "nodes": 220
+    },
+    {
+      "steps": 2433,
+      "ms": 74,
+      "length": 18,
+      "nodes": 348
+    },
+    {
+      "steps": 536,
+      "ms": 17,
+      "length": 7,
+      "nodes": 106
+    },
+    {
+      "steps": 91,
+      "ms": 6,
+      "length": 4,
+      "nodes": 27
+    }
+  ]
+}
