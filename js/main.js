@@ -84,7 +84,7 @@ function saveImage() {
     combinedCanvas.width = gridCanvas.width;
     combinedCanvas.height = gridCanvas.height + 200; // Adjust height to fit one line of text
 
-    ctx.fillStyle = '#121212';
+    ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
     // Draw the grid
     ctx.drawImage(gridCanvas, 0, 0);
@@ -109,7 +109,7 @@ function saveImage() {
 
     // Draw the statistics
     ctx.font = '28px Arial';
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = 'black';
     ctx.fillText(statsText, 10, gridCanvas.height + 30);
     
     if (selectAlgorithm = 'aStar') {
