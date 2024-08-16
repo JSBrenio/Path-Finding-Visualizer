@@ -42,7 +42,7 @@ def seperated_graphs():
         # Show the plot
         plt.show()
 
-def consolidated_graphs():
+def consolidated_graphs(subplots=True):
     all_metrics = set()  # Collect all possible metrics
 
     # First pass to collect all metrics from files
@@ -63,26 +63,40 @@ def consolidated_graphs():
             temp_df = pd.DataFrame(data[key])
             combined_data[key] = pd.concat([combined_data[key], temp_df], ignore_index=True) if not combined_data[key].empty else temp_df
 
-    # Create a figure and a grid of subplots (as before)
-    fig, axs = plt.subplots(2, 2, figsize=(16, 8))
-    axs = axs.flatten()
-    plt.get_current_fig_manager().set_window_title('Trials Combined')
+    if subplots:
+        # Create a figure and a grid of subplots
+        fig, axs = plt.subplots(2, 2, figsize=(16, 8))
+        axs = axs.flatten()
+        plt.get_current_fig_manager().set_window_title('Trials Combined')
 
-    # Plot the combined data for each metric (as before)
-    for i, metric in enumerate(metrics):
-        ax = axs[i]
-        for key, df in combined_data.items():
-                ax.plot(df[metric], label=key)  # use line plot instead of 'x' markers
+        # Plot the combined data for each metric
+        for i, metric in enumerate(metrics):
+            ax = axs[i]
+            for key, df in combined_data.items():
+                    ax.plot(df[metric], label=key)  # use line plot instead of 'x' markers
 
-        ax.set_title(titles[i])
-        ax.set_xlabel('Trials')
-        ax.set_ylabel(metric.capitalize())
-        ax.legend()
+            ax.set_title(titles[i])
+            ax.set_xlabel('Trials')
+            ax.set_ylabel(metric.capitalize())
+            ax.legend()
+            
+        # Adjust layout to prevent overlap
+        plt.tight_layout()
+
+        # Show the plot
+        plt.show()
+    else:
+        # Display individual graphs for each metric
+        for metric in metrics:
+            plt.figure(figsize=(12, 6))
+            for key, df in combined_data.items():
+                plt.plot(df[metric], label=key)
+            
+            plt.title(metric.capitalize())
+            plt.xlabel('Trials')
+            plt.ylabel(metric.capitalize())
+            plt.legend()
+            plt.tight_layout()
+            plt.show()
         
-    # Adjust layout to prevent overlap
-    plt.tight_layout()
-
-    # Show the plot
-    plt.show()
-        
-consolidated_graphs()
+consolidated_graphs(False)
