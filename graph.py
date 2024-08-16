@@ -87,12 +87,12 @@ def consolidated_graphs(subplots=True):
         plt.show()
     else:
         # Display individual graphs for each metric
-        for metric in metrics:
+        for i, metric in enumerate(metrics):
             plt.figure(figsize=(12, 6))
             for key, df in combined_data.items():
                 plt.plot(df[metric], label=key)
             
-            plt.title(metric.capitalize())
+            plt.title(titles[i])
             plt.xlabel('Trials')
             plt.ylabel(metric.capitalize())
             plt.legend()
