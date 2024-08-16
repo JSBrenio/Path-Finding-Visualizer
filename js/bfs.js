@@ -32,7 +32,9 @@ export async function bfs() {
 
     while (!frontier.isEmpty() && running) {
         const current = frontier.dequeue();
-        highlightCell(current.x, current.y, '#FFD700'); // Gold
+
+        // Highlight the current cell
+        highlightCell(current.x, current.y, '#87CEEB');
         stats.step();
 
         // Check if the current cell is the target cell
@@ -47,6 +49,8 @@ export async function bfs() {
             if (!reached.has(neighbor)) {
                 frontier.enqueue(neighbor);
                 stats.visit();
+
+                // Highlight the visited cell
                 highlightCell(neighbor.x, neighbor.y, '#FFD700');
                 if (neighbor.color === 'red') {
                     running = false;

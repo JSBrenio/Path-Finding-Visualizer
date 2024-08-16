@@ -57,6 +57,9 @@ export async function aStar() {
         stats.step();
 
         const current = frontier.dequeue();
+        // Highlight the current cell
+        highlightCell(current.x, current.y, '#87CEEB');
+
 
         // Reached Goal
         if (current.x === goal.x && current.y === goal.y) {
@@ -89,13 +92,12 @@ export async function aStar() {
                 if (!frontier.elements.some(e => e.element === neighbor)) { // check if the cell is already in the frontier
                     frontier.enqueue(neighbor, totalCost.get(neighbor)); // add the cell to the frontier
 
+                    // Highlight the promising cell
                     highlightCell(neighbor.x, neighbor.y, '#FFD700');
                     stats.visit();
                 }
             }
 
-        // Visualize the current step
-        highlightCell(current.x, current.y, '#FFD700'); // Light blue for current cell
         stats.stopTimer();
         stats.update();
         if (!document.getElementById('sleep').checked) await sleep(10); // Pause to visualize

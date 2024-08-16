@@ -44,7 +44,8 @@ function getNeighbors(current) {
         }
 
         if (isValidCell(newX, newY)) {
-            highlightCell(newX, newY, '#87CEEB');
+            if (document.getElementById('aStarCheckbox').checked &&
+        document.getElementById('diagonalMovementCheckbox').checked) highlightCell(newX, newY, '#87CEEB');
             neighbors.push(matrix[newY][newX]);
         }
     }
